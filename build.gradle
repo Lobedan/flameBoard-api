@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+
+configurations {
+    provided
+}
+
+jar {
+    baseName = "$applicationName"
+    version =  "$applicationVersion"
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://mosaic4cap.de/nexus/content/repositories/flameboard-releases/" }
+    maven { url "http://mosaic4cap.de/nexus/content/repositories/flameboard-snapshots/" }
+}
+
+dependencies {
+    compile "org.apache.commons:commons-lang3:$commonsLangVersion"
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+
+    compile "mysql:mysql-connector-java:$mysqlConnectorVersion"
+    compile "org.hibernate:hibernate-core:$hibernateVersion"
+    compile "org.apache.tomcat:tomcat-dbcp:$tomcatVersion"
+
+    compile "org.springframework.data:spring-data-jpa:$springDataVersion"
+
+    provided "org.springframework:core:$springVersion"
+    provided "org.springframework:beans:$springVersion"
+    provided "org.springframework:spring-context:$springVersion"
+    provided "org.springframework:spring-orm:$springVersion"
+
+    testCompile "junit:junit:$junitVersion"
+    testCompile "org.springframework:spring-test:$springVersion"
+    compile "com.h2database:h2:$h2Version"
+}
+
+task ('start', dependsOn: ['clean', 'bootRun'])
